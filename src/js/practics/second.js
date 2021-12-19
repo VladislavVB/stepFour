@@ -2,21 +2,47 @@ let offset = 1;
 let limit = 10;
 let fullData = [];
 let dataOnPage = [];
+const dataBtn = document.querySelectorAll(".data-btn");
+
+dataBtn.forEach((elem) => {
+  elem.addEventListener("click", () => {
+    dataBtn.forEach((elem) => {
+      elem.classList.remove("disabel");
+    });
+    elem.classList.add("disabel");
+  });
+});
 
 const getRes = async (url) => {
+  const tableDataHead = document.querySelector(".table__data-head");
+  const filterPagination = document.querySelector(".filter-pagination");
+
+  tableDataHead.innerHTML = `
+  <div class="spinner-border text-light load-spiner" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+  `;
+
   const responseSm = await fetch(url, {});
   const dataPerson = await responseSm.json();
   console.log(dataPerson);
   fullData = dataPerson;
-  // console.log(responseSm);
 
-  const filterPagination = document.querySelector(".filter-pagination");
+  tableDataHead.innerHTML = `
+  <tr>
+    <th scope="col">id</th>
+    <th scope="col">firstName</th>
+    <th scope="col">lastName</th>
+    <th scope="col">email</th>
+    <th scope="col">phone</th>
+  </tr>
+  `;
 
   filterPagination.innerHTML = getPaginator(
     Math.ceil(dataPerson.length / limit)
   );
   fillData(fullData.slice((offset - 1) * limit, (offset - 1) * limit + limit));
-  disabelBtn()
+  disabelBtn();
 };
 
 const fillData = (data) => {
@@ -68,7 +94,9 @@ const getPaginator = (pageCount) => {
   <li onclick="rollPage('prev')" class="page-item page-item-prev"><a class="page-link">Previous</a></li>
   `;
   for (let i = 1; i <= pageCount; i++) {
-    res += `<li onclick="getDataPage(${i})" class="page-item page-item-page"><a class="page-link">${i}</a></li>`;
+    if (i > 10) {
+      res += `<li onclick="getDataPage(${i})" class="page-item page-item-page"><a class="page-link">${i}</a></li>`;
+    }
   }
 
   res += `
@@ -81,7 +109,7 @@ const getPaginator = (pageCount) => {
 const getDataPage = (i) => {
   offset = i;
   fillData(fullData.slice((offset - 1) * limit, (offset - 1) * limit + limit));
-  disabelBtn()
+  disabelBtn();
 };
 
 const rollPage = (side) => {
@@ -93,7 +121,7 @@ const rollPage = (side) => {
       offset--;
       break;
   }
-  disabelBtn()
+  disabelBtn();
   fillData(fullData.slice((offset - 1) * limit, (offset - 1) * limit + limit));
 };
 

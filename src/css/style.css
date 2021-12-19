@@ -68,3 +68,14 @@ body {
   pointer-events: none;
   opacity: 0.5;
 }
+.data-btn.disabel {
+  pointer-events: none;
+  opacity: 0.5;
+}
+.load-spiner {
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
