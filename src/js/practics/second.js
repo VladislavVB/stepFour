@@ -4,9 +4,7 @@ let fullData = [];
 let dataOnPage = [];
 
 const getRes = async (url) => {
-  const responseSm = await fetch(
-    url, {}
-  );
+  const responseSm = await fetch(url, {});
   const dataPerson = await responseSm.json();
   console.log(dataPerson);
   fullData = dataPerson;
@@ -18,6 +16,7 @@ const getRes = async (url) => {
     Math.ceil(dataPerson.length / limit)
   );
   fillData(fullData.slice((offset - 1) * limit, (offset - 1) * limit + limit));
+  disabelBtn()
 };
 
 const fillData = (data) => {
@@ -69,31 +68,48 @@ const getPaginator = (pageCount) => {
   <li onclick="rollPage('prev')" class="page-item page-item-prev"><a class="page-link">Previous</a></li>
   `;
   for (let i = 1; i <= pageCount; i++) {
-    res += `<li onclick="getDataPage(${i})" class="page-item"><a class="page-link">${i}</a></li>`;
+    res += `<li onclick="getDataPage(${i})" class="page-item page-item-page"><a class="page-link">${i}</a></li>`;
   }
 
   res += `
   <li onclick="rollPage('next')" class="page-item page-item-next"><a class="page-link">Next</a></li>
   </ul>
   `;
-
   return res;
 };
 
 const getDataPage = (i) => {
   offset = i;
   fillData(fullData.slice((offset - 1) * limit, (offset - 1) * limit + limit));
+  disabelBtn()
 };
 
 const rollPage = (side) => {
   switch (side) {
     case "next":
-      offset ++
+      offset++;
       break;
     case "prev":
-      offset --
+      offset--;
       break;
   }
-  console.log(offset);
+  disabelBtn()
   fillData(fullData.slice((offset - 1) * limit, (offset - 1) * limit + limit));
+};
+
+const disabelBtn = () => {
+  const pageItemNext = document.querySelector(".page-item-next");
+  const pageItemPrev = document.querySelector(".page-item-prev");
+  console.log(fullData);
+  console.log(offset);
+  if (offset == 1) {
+    pageItemPrev.classList.add("disabel");
+    pageItemNext.classList.remove("disabel");
+  } else if (offset == Math.ceil(fullData.length / limit)) {
+    pageItemNext.classList.add("disabel");
+    pageItemPrev.classList.remove("disabel");
+  } else {
+    pageItemNext.classList.remove("disabel");
+    pageItemPrev.classList.remove("disabel");
+  }
 };

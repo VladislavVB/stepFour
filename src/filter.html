@@ -18,10 +18,10 @@
       <div class="container">
         <div class="filter__content row">
           <div class="col-lg-12 filter__content-button">
-            <button onclick="getRes()" type="button" class="btn btn-light">
+            <button onclick="getRes('http://www.filltext.com/?rows=32&id=%7Bnumber%7C1000%7D&firstName=%7BfirstName%7D&lastName=%7BlastName%7D&email=%7Bemail%7D&phone=%7Bphone%7C(xxx)xxx-xx-xx%7D&adress=%7BaddressObject%7D&description=%7Blorem%7C32%7D')" type="button" class="btn btn-light">
               Маленький объем данных
             </button>
-            <button onclick="getResBig()" type="button" class="btn btn-light">
+            <button onclick="getRes('http://www.filltext.com/?rows=1000&id=%7Bnumber%7C1000%7D&firstName=%7BfirstName%7D&delay=3&lastName=%7BlastName%7D&email=%7Bemail%7D&phone=%7Bphone%7C(xxx)xxx-xx-xx%7D&adress=%7BaddressObject%7D&description=%7Blorem%7C32%7D')" type="button" class="btn btn-light">
               Большой объем данных
             </button>
           </div>
@@ -30,6 +30,7 @@
               <input type="text" name="" id="">
               <button>Найти</button>
             </div> -->
+            
           </div>
           <div class="col-12">
             <table class="table table__data">
@@ -53,7 +54,17 @@
                   <td class="userAdress" >@mdo</td>
                 </tr> -->
               </tbody>
+             
             </table>
+            <nav aria-label="Page navigation example" class="filter-pagination">
+              <!-- <ul class="pagination">
+                <li class="page-item"><a class="page-link">Previous</a></li>
+                <li class="page-item"><a class="page-link">1</a></li>
+                <li class="page-item"><a class="page-link">2</a></li>
+                <li class="page-item"><a class="page-link">3</a></li>
+                <li class="page-item"><a class="page-link">Next</a></li>
+              </ul> -->
+            </nav>
           </div>
           <div class="col-12 detail__person">
             <!-- <h3>Выбран пользователь Sue Corson</h3>

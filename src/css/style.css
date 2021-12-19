@@ -46,6 +46,25 @@ body {
 .detail__person {
   margin-top: 50px;
 }
+.page-item {
+  cursor: pointer;
+}
+
 .table > :not(caption) > * > * {
   color: #fff;
+}
+
+.filter-pagination {
+  display: flex;
+  justify-content: center;
+}
+
+.page-item-prev.disabel {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.page-item-next.disabel {
+  pointer-events: none;
+  opacity: 0.5;
 }
