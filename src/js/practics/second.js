@@ -2,6 +2,7 @@ let offset = 1;
 let limit = 10;
 let fullData = [];
 let dataOnPage = [];
+let temp = "";
 const dataBtn = document.querySelectorAll(".data-btn");
 
 dataBtn.forEach((elem) => {
@@ -16,13 +17,15 @@ dataBtn.forEach((elem) => {
 const getRes = async (url) => {
   const tableDataHead = document.querySelector(".table__data-head");
   const filterPagination = document.querySelector(".filter-pagination");
-
+  tableDataHead.innerHTML = "";
+  filterPagination.innerHTML = "";
+  temp = "";
   tableDataHead.innerHTML = `
   <div class="spinner-border text-light load-spiner" role="status">
     <span class="visually-hidden">Loading...</span>
   </div>
   `;
-
+  console.log("88888888888888");
   const responseSm = await fetch(url, {});
   const dataPerson = await responseSm.json();
   console.log(dataPerson);
@@ -47,15 +50,15 @@ const getRes = async (url) => {
 
 const fillData = (data) => {
   const tableBody = document.querySelector(".table__body");
-  let temp = "";
+  temp = "";
   for (const key in data) {
     temp += `
     <tr class="userInfoLine">
       <th class="userID"  scope="row">${data[key].id}</th>
       <td class="userFirstName" >${data[key].firstName}</td>
       <td class="userLastName" >${data[key].lastName}</td>
-      <td class="userEmail" >${data[key].email}</td>
-      <td class="userPhone" >${data[key].phone}</td>
+      <td class="userEmail" ><a href="mailto:${data[key].email}">${data[key].email}</a></td>
+      <td class="userPhone" > <a href="tel:${data[key].phone}">${data[key].phone}</a> </td>
     </tr>
     `;
   }
@@ -69,8 +72,7 @@ const fillData = (data) => {
       console.log(index);
       detailPerson.innerHTML = `
         <h3>Выбран пользователь ${data[index].firstName}</h3>
-        <p class="detail__person-descp">Описание: </br>
-        ${data[index].description}</p>
+        <p class="detail__person-descp">Описание: </br>${data[index].description}</p>
         <p class="detail__person-streetAddress">Адрес проживания: ${data[index].adress.streetAddress}</з>
         <p class="detail__person-city">Город: ${data[index].adress.city}</з>
         <p class="detail__person-state">Провинция/штат: ${data[index].adress.state}</з>
@@ -94,9 +96,7 @@ const getPaginator = (pageCount) => {
   <li onclick="rollPage('prev')" class="page-item page-item-prev"><a class="page-link">Previous</a></li>
   `;
   for (let i = 1; i <= pageCount; i++) {
-    if (i > 10) {
-      res += `<li onclick="getDataPage(${i})" class="page-item page-item-page"><a class="page-link">${i}</a></li>`;
-    }
+    res += `<li onclick="getDataPage(${i})" class="page-item page-item-page"><a class="page-link">${i}</a></li>`;
   }
 
   res += `
