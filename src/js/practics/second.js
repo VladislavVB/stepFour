@@ -33,11 +33,11 @@ const getRes = async (url) => {
 
   tableDataHead.innerHTML = `
   <tr>
-    <th scope="col">id</th>
-    <th scope="col">firstName</th>
-    <th scope="col">lastName</th>
-    <th scope="col">email</th>
-    <th scope="col">phone</th>
+    <th scope="col headTabel" onclick="" >id</th>
+    <th scope="col headTabel" onclick="" >firstName</th>
+    <th scope="col headTabel" onclick="" >lastName</th>
+    <th scope="col headTabel" onclick="" >email</th>
+    <th scope="col headTabel" onclick="" >phone</th>
   </tr>
   `;
 
@@ -83,8 +83,8 @@ const fillData = (data) => {
 
   searchPersonWrapper.innerHTML = `
     <div class="search__person">
-      <input type="text" name="" id="">
-      <button>Найти</button>
+      <input class="search-input" type="text" name="" id="">
+      <button onclick="search()" >Найти</button>
     </div>
   `;
 };
@@ -141,3 +141,16 @@ const disabelBtn = () => {
     pageItemPrev.classList.remove("disabel");
   }
 };
+
+const search = () => {
+  const searchInput = document.querySelector('.search-input');
+  searchInput.value;
+  console.log(searchInput.value);
+  // console.log(fullData);
+  fullData.forEach((elem) => {
+    console.log(elem.firstName);
+    if(elem.firstName.innerText.search(searchInput.value) == -1) {
+      
+    }
+  });
+}
