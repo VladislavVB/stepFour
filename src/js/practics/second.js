@@ -2,6 +2,7 @@ let offset = 1;
 let limit = 10;
 let fullData = [];
 let dataOnPage = [];
+let currentData = [];
 let temp = "";
 const dataBtn = document.querySelectorAll(".data-btn");
 
@@ -16,16 +17,14 @@ dataBtn.forEach((elem) => {
 
 const getRes = async (url) => {
   const tableDataHead = document.querySelector(".table__data-head");
-  const filterPagination = document.querySelector(".filter-pagination");
   tableDataHead.innerHTML = "";
-  filterPagination.innerHTML = "";
+ 
   temp = "";
   tableDataHead.innerHTML = `
   <div class="spinner-border text-light load-spiner" role="status">
     <span class="visually-hidden">Loading...</span>
   </div>
   `;
-  console.log("88888888888888");
   const responseSm = await fetch(url, {});
   const dataPerson = await responseSm.json();
   console.log(dataPerson);
@@ -33,32 +32,37 @@ const getRes = async (url) => {
 
   tableDataHead.innerHTML = `
   <tr>
-    <th scope="col headTabel" onclick="" >id</th>
-    <th scope="col headTabel" onclick="" >firstName</th>
-    <th scope="col headTabel" onclick="" >lastName</th>
-    <th scope="col headTabel" onclick="" >email</th>
-    <th scope="col headTabel" onclick="" >phone</th>
+    <th scope="col headTabel" onclick="sortUser('id')" >id</th>
+    <th scope="col headTabel" onclick="sortUser('firstName')" >firstName</th>
+    <th scope="col headTabel" onclick="sortUser('lastName')" >lastName</th>
+    <th scope="col headTabel" onclick="sortUser('email')" >email</th>
+    <th scope="col headTabel" onclick="sortUser('phone')" >phone</th>
   </tr>
   `;
-
-  filterPagination.innerHTML = getPaginator(
-    Math.ceil(dataPerson.length / limit)
-  );
-  fillData(fullData.slice((offset - 1) * limit, (offset - 1) * limit + limit));
-  disabelBtn();
+  currentData = fullData
+  fillData();
 };
 
-const fillData = (data) => {
+const fillData = () => {
+  console.log(currentData);
+  let copyData = currentData.slice((offset - 1) * limit, (offset - 1) * limit + limit);
+  console.log(copyData);
+  const filterPagination = document.querySelector(".filter-pagination");
+  filterPagination.innerHTML = "";
+  filterPagination.innerHTML = getPaginator(
+    Math.ceil(currentData.length / limit), currentData
+  );
+
   const tableBody = document.querySelector(".table__body");
   temp = "";
-  for (const key in data) {
+  for (const key in copyData) {
     temp += `
     <tr class="userInfoLine">
-      <th class="userID"  scope="row">${data[key].id}</th>
-      <td class="userFirstName" >${data[key].firstName}</td>
-      <td class="userLastName" >${data[key].lastName}</td>
-      <td class="userEmail" ><a href="mailto:${data[key].email}">${data[key].email}</a></td>
-      <td class="userPhone" > <a href="tel:${data[key].phone}">${data[key].phone}</a> </td>
+      <th class="userID"  scope="row">${copyData[key].id}</th>
+      <td class="userFirstName" >${copyData[key].firstName}</td>
+      <td class="userLastName" >${copyData[key].lastName}</td>
+      <td class="userEmail" ><a href="mailto:${copyData[key].email}">${copyData[key].email}</a></td>
+      <td class="userPhone" > <a href="tel:${copyData[key].phone}">${copyData[key].phone}</a> </td>
     </tr>
     `;
   }
@@ -71,12 +75,12 @@ const fillData = (data) => {
     elem.onclick = () => {
       console.log(index);
       detailPerson.innerHTML = `
-        <h3>Выбран пользователь ${data[index].firstName}</h3>
-        <p class="detail__person-descp">Описание: </br>${data[index].description}</p>
-        <p class="detail__person-streetAddress">Адрес проживания: ${data[index].adress.streetAddress}</з>
-        <p class="detail__person-city">Город: ${data[index].adress.city}</з>
-        <p class="detail__person-state">Провинция/штат: ${data[index].adress.state}</з>
-        <p class="detail__person-zip">Индекс: ${data[index].adress.zip}</з>
+        <h3>Выбран пользователь ${copyData[index].firstName}</h3>
+        <p class="detail__person-descp">Описание: </br>${copyData[index].description}</p>
+        <p class="detail__person-streetAddress">Адрес проживания: ${copyData[index].adress.streetAddress}</з>
+        <p class="detail__person-city">Город: ${copyData[index].adress.city}</з>
+        <p class="detail__person-state">Провинция/штат: ${copyData[index].adress.state}</з>
+        <p class="detail__person-zip">Индекс: ${copyData[index].adress.zip}</з>
       `;
     };
   });
@@ -87,16 +91,19 @@ const fillData = (data) => {
       <button onclick="search()" >Найти</button>
     </div>
   `;
+  disabelBtn()
 };
 
 const getPaginator = (pageCount) => {
-  console.log(pageCount);
   let res = `
   <ul class="pagination">
   <li onclick="rollPage('prev')" class="page-item page-item-prev"><a class="page-link">Previous</a></li>
   `;
   for (let i = 1; i <= pageCount; i++) {
+
+    // if (2 >= pageCount) {
     res += `<li onclick="getDataPage(${i})" class="page-item page-item-page"><a class="page-link">${i}</a></li>`;
+    // }
   }
 
   res += `
@@ -107,9 +114,9 @@ const getPaginator = (pageCount) => {
 };
 
 const getDataPage = (i) => {
+  console.log(i);
   offset = i;
-  fillData(fullData.slice((offset - 1) * limit, (offset - 1) * limit + limit));
-  disabelBtn();
+  fillData();
 };
 
 const rollPage = (side) => {
@@ -121,19 +128,17 @@ const rollPage = (side) => {
       offset--;
       break;
   }
-  disabelBtn();
-  fillData(fullData.slice((offset - 1) * limit, (offset - 1) * limit + limit));
+  fillData();
 };
 
 const disabelBtn = () => {
   const pageItemNext = document.querySelector(".page-item-next");
   const pageItemPrev = document.querySelector(".page-item-prev");
-  console.log(fullData);
   console.log(offset);
   if (offset == 1) {
     pageItemPrev.classList.add("disabel");
     pageItemNext.classList.remove("disabel");
-  } else if (offset == Math.ceil(fullData.length / limit)) {
+  } else if (offset == Math.ceil(currentData.length / limit)) {
     pageItemNext.classList.add("disabel");
     pageItemPrev.classList.remove("disabel");
   } else {
@@ -143,14 +148,34 @@ const disabelBtn = () => {
 };
 
 const search = () => {
-  const searchInput = document.querySelector('.search-input');
-  searchInput.value;
-  console.log(searchInput.value);
+  offset = 1;
+  // let searchArr = fullData;
+  const searchInput = document.querySelector(".search-input");
+  let valueInput = searchInput.value;
+  console.log(valueInput);
   // console.log(fullData);
-  fullData.forEach((elem) => {
-    console.log(elem.firstName);
-    if(elem.firstName.innerText.search(searchInput.value) == -1) {
-      
-    }
-  });
-}
+  const searchArr = fullData.filter(
+    (elem) =>
+      elem.firstName.toUpperCase().indexOf(valueInput.toUpperCase()) != -1
+  );
+  console.log(searchArr);
+  currentData = searchArr
+  fillData();
+};
+
+let sortingMethod = 'asc';
+
+const sortUser = (str) => {
+  console.log(sortingMethod);
+  console.log(str);
+  // fullData.id.sort();
+  console.log(5555);
+  if (sortingMethod === 'asc') {
+    currentData = fullData.sort((a, b) => (a[str] > b[str]) - (a[str] < b[str]))
+    sortingMethod = 'desc'
+  } else {
+    currentData = fullData.sort((a, b) => (a[str] < b[str]) - (a[str] > b[str]))
+    sortingMethod = 'asc'
+  }
+  fillData()
+};
