@@ -88,7 +88,7 @@ const fillData = () => {
 
   searchPersonWrapper.innerHTML = `
     <div class="search__person input-group mb-3">
-      <input class="search-input form-control" type="text" name="" id="">
+      <input placeholder="First name" class="search-input form-control" type="text" name="" id="">
       <button  class="btn btn-light data-btn" onclick="search()" >Найти</button>
       <button  class="btn btn-light data-btn" onclick="searchRemove()" >Сбросить</button>
     </div>
