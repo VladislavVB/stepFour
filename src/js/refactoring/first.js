@@ -1,36 +1,9 @@
-const funck = (s, a, b) => {
+const func = (s, a, b) => {
+  if (s == "" || (a == "" && b == "")) return -1;
+  for (let i = s.length; --i >= 0; ) if (s[i] == a || s[i] == b) return i;
+};
 
-	if (s.match(/^$/)) {
-		return -1;
-	}
-	
-	let i = s.length -1;
-	let aIndex =     -1;
-	let bIndex =     -1;
-	
-	while ((aIndex == -1) && (bIndex == -1) && (i > 0)) {
-	    if (s.substring(i, i +1) == a) {
-	    	aIndex = i;
-    	}
-	    if (s.substring(i, i +1) == b) {
-	    	bIndex = i;
-    	}
-	    i = i - 1;
-	}
-	
-	if (aIndex != -1) {
-	    if (bIndex == -1) {
-	        return aIndex;
-	    }
-	    else {
-	        return Math.max(aIndex, bIndex);
-	    }
-	}
-	
-	if (bIndex != -1) {
-	    return bIndex;
-	}
-	else {
-	    return -1;
-	}
-}
+console.log(func("aba", "a", "b"));
+console.log(func("aba", "", ""));
+console.log(func("aba", "", "b"));
+console.log(func("aba", "a", ""));
