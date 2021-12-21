@@ -1,9 +1,9 @@
 let offset = 1;
-let limit = 3;
+let limit = 15;
 let fullData = [];
 let dataOnPage = [];
 let currentData = [];
-// let activePage = 1;
+let sortingMethod = "asc";
 let temp = "";
 const dataBtn = document.querySelectorAll(".data-btn");
 
@@ -32,11 +32,11 @@ const getRes = async (url) => {
 
   tableDataHead.innerHTML = `
   <tr>
-    <th scope="col headTabel" onclick="sortUser('id')" >id</th>
-    <th scope="col headTabel" onclick="sortUser('firstName')" >firstName</th>
-    <th scope="col headTabel" onclick="sortUser('lastName')" >lastName</th>
-    <th scope="col headTabel" onclick="sortUser('email')" >email</th>
-    <th scope="col headTabel" onclick="sortUser('phone')" >phone</th>
+    <th scope="col headTabel" class="head-tabel" onclick="sortUser('id', 0)" >id <img src="img/nt.png" alt=""> </th>
+    <th scope="col headTabel" class="head-tabel" onclick="sortUser('firstName', 1)" >firstName <img src="img/nt.png" alt=""></th>
+    <th scope="col headTabel" class="head-tabel" onclick="sortUser('lastName', 2)" >lastName <img src="img/nt.png" alt=""></th>
+    <th scope="col headTabel" class="head-tabel" onclick="sortUser('email', 3)" >email <img src="img/nt.png" alt=""> </th>
+    <th scope="col headTabel" class="head-tabel" onclick="sortUser('phone', 4)" >phone <img src="img/nt.png" alt=""> </th>
   </tr>
   `;
   currentData = fullData;
@@ -87,28 +87,28 @@ const fillData = () => {
   });
 
   searchPersonWrapper.innerHTML = `
-    <div class="search__person">
-      <input class="search-input" type="text" name="" id="">
-      <button onclick="search()" >Найти</button>
-      <button onclick="searchRemove()" >Сбросить</button>
+    <div class="search__person input-group mb-3">
+      <input class="search-input form-control" type="text" name="" id="">
+      <button  class="btn btn-light data-btn" onclick="search()" >Найти</button>
+      <button  class="btn btn-light data-btn" onclick="searchRemove()" >Сбросить</button>
     </div>
   `;
   disabelBtn();
 };
 
-const getPaginator = (pageCount, ) => {
-  console.log(offset);
+const getPaginator = (pageCount) => {
   let res = `
   <ul class="pagination">
   <li onclick="rollPage('prev')" class="page-item page-item-prev"><a class="page-link">Previous</a></li>
   `;
-  for (let i = 1; i <= pageCount; i++) {
-    // activePage = i
-    // console.log(activePage);
-    // if (2 >= pageCount) {
-    // console.log(pageCount);
-    res += `<li onclick="getDataPage(${i})" class="page-item page-item-page"><a class="page-link">${i}</a></li>`;
-    // }
+  for (
+    let i = offset - 3 <= 0 ? 1 : offset - 3;
+    i <= (offset + 3 > pageCount ? pageCount : offset + 3);
+    i++
+  ) {
+    res += `<li onclick="getDataPage(${i})" class="page-item page-item-page ${
+      offset == i && "active"
+    }"><a class="page-link">${i}</a></li>`;
   }
 
   res += `
@@ -120,7 +120,6 @@ const getPaginator = (pageCount, ) => {
 
 const getDataPage = (i) => {
   offset = i;
-  console.log(i);
   fillData();
 };
 
@@ -140,8 +139,6 @@ const rollPage = (side) => {
 const disabelBtn = () => {
   const pageItemNext = document.querySelector(".page-item-next");
   const pageItemPrev = document.querySelector(".page-item-prev");
-  // console.log(offset + 'wwwwwwwwwwwwww');
-  // console.log(Math.ceil(currentData.length / limit));
 
   if (offset == 1) {
     pageItemPrev.classList.add("disabel");
@@ -155,7 +152,6 @@ const disabelBtn = () => {
   }
 
   if (Math.ceil(currentData.length / limit) == 1) {
-    // console.log('rty');
     pageItemPrev.classList.add("disabel");
     pageItemNext.classList.add("disabel");
   }
@@ -185,18 +181,27 @@ const searchRemove = () => {
   fillData();
 };
 
-let sortingMethod = "asc";
+const sortUser = (str, index) => {
+  const arrowHead = document.querySelectorAll(".head-tabel img");
+  arrowHead.forEach((elem) => {
+    elem.classList.remove("up");
+    elem.classList.remove("down");
+  });
+  // elem.classList.add('up')
 
-const sortUser = (str) => {
   if (sortingMethod === "asc") {
     currentData = fullData.sort(
       (a, b) => (a[str] > b[str]) - (a[str] < b[str])
     );
+    arrowHead[index].classList.remove("down");
+    arrowHead[index].classList.add("up");
     sortingMethod = "desc";
   } else {
     currentData = fullData.sort(
       (a, b) => (a[str] < b[str]) - (a[str] > b[str])
     );
+    arrowHead[index].classList.remove("up");
+    arrowHead[index].classList.add("down");
     sortingMethod = "asc";
   }
   fillData();
