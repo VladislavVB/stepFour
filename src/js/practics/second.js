@@ -155,6 +155,10 @@ const disabelBtn = () => {
     pageItemPrev.classList.add("disabel");
     pageItemNext.classList.add("disabel");
   }
+  if (Math.ceil(currentData.length / limit) == 0) {
+    pageItemPrev.classList.add("d-none");
+    pageItemNext.classList.add("d-none");
+  }
 };
 
 const search = () => {
